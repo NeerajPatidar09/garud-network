@@ -1,0 +1,8 @@
+# ==============================
+# GARUD NETWORK - .gitignore
+# ==============================
+*.md
+*.yml
+
+# frontend
+client/

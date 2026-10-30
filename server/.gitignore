@@ -1,0 +1,100 @@
+
+# ==============================
+# GARUD NETWORK - .gitignore
+# ==============================
+
+# Java compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Spring Boot
+*.log
+*.yml
+logs/
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# IDE - Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# Node.js / React
+node_modules/
+dist/
+build/
+.next/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Frontend environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database
+*.sql~
+*.sqlite
+*.db
+
+# Docker
+docker-compose.override.yml
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.bak
+
+# Test reports
+surefire-reports/
+failsafe-reports/
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
