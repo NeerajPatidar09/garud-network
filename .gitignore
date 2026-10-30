@@ -1,7 +1,15 @@
 # ==============================
 # GARUD NETWORK - .gitignore
 # ==============================
-*.md
+API.md
+ARCHITECTURE.md
+AUTH_SECURITY.md
+DATABASE.md
+DESIGN.md
+FEATURES.md
+PLAN.md
+PRD.md
+SETUP.md
 *.yml
 
 # frontend
