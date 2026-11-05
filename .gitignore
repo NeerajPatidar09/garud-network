@@ -13,4 +13,4 @@ SETUP.md
 *.yml
 
 # frontend
-client/
+.vscode/*
