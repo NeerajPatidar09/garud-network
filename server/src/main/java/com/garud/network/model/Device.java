@@ -1,76 +1,156 @@
 package com.garud.network.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "devices")
-@Data
-@NoArgsConstructor
-@Builder
-public class Device {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(
+    name = "devices",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_devices_serial_number",
+            columnNames = "serial_number"
+        )
+    }
+)
+public class Device extends BaseEntity {
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    @Column(
+        name = "hostname",
+        nullable = false,
+        length = 100
+    )
+    private String hostname;
 
-    @Column(name = "ip_address", nullable = false, length = 45)
+    @Column(
+        name = "ip_address",
+        nullable = false,
+        length = 45
+    )
     private String ipAddress;
 
-    @Column(name = "mac_address", length = 17)
-    private String macAddress;
+    @Enumerated(EnumType.STRING)
+    @Column(
+        name = "device_type",
+        nullable = false,
+        length = 30
+    )
+    private DeviceType deviceType;
 
-    @Column(name = "device_type", nullable = false, length = 30)
-    private String deviceType;
+    @Column(length = 100)
+    private String vendor;
 
-    @Builder.Default
-    @Column(name = "status", nullable = false, length = 20)
-    private String status = "UNKNOWN";
+    @Column(length = 100)
+    private String model;
 
-    @Column(name = "location", length = 100)
+    @Column(
+        name = "serial_number",
+        length = 100,
+        unique = true
+    )
+    private String serialNumber;
+
+    @Column(length = 150)
     private String location;
 
-    @Builder.Default
-    @Column(name = "is_simulated", nullable = false)
-    private Boolean isSimulated = false;
+    @Enumerated(EnumType.STRING)
+    @Column(
+        nullable = false,
+        length = 30
+    )
+    private DeviceStatus status = DeviceStatus.ACTIVE;
 
-    @Builder.Default
-    @Column(name = "is_enabled", nullable = false)
-    private Boolean isEnabled = true;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    @Builder.Default
-    @Column(name = "snmp_version", length = 10)
-    private String snmpVersion = "v2c";
+    protected Device() {
+        // Required by JPA
+    }
 
-    @Builder.Default
-    @Column(name = "snmp_community", length = 100)
-    private String snmpCommunity = "public";
+    public Device(
+        String hostname,
+        String ipAddress,
+        DeviceType deviceType
+    ) {
+        this.hostname = hostname;
+        this.ipAddress = ipAddress;
+        this.deviceType = deviceType;
+        this.status = DeviceStatus.ACTIVE;
+    }
 
-    @Builder.Default
-    @Column(name = "snmp_port", nullable = false)
-    private Integer snmpPort = 161;
+    public String getHostname() {
+        return hostname;
+    }
 
-    @Builder.Default
-    @Column(name = "consecutive_failures", nullable = false)
-    private Integer consecutiveFailures = 0;
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
 
-    @Column(name = "last_polled_at")
-    private Instant lastPolledAt;
+    public String getIpAddress() {
+        return ipAddress;
+    }
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
 
-    @Column(name = "deleted_at")
-    private Instant deletedAt;
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public DeviceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeviceStatus status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

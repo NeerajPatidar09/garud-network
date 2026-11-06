@@ -59,7 +59,7 @@ export default function LoginPage() {
 
     <div className="login-page">
 
-      <h1>NOIMP Login</h1>
+      <h1>Garud Network Login</h1>
 
       <form onSubmit={handleSubmit}>
 

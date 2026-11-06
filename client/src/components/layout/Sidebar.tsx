@@ -13,7 +13,11 @@ export default function Sidebar() {
     <aside className="sidebar">
 
       <div className="sidebar-brand">
-        <h2>NOIMP</h2>
+        <img
+          src="/images/garud-network-logo.png"
+          alt="Garud Network"
+          className="sidebar-logo"
+        />
         <span>Infrastructure Platform</span>
       </div>
 

@@ -11,6 +11,7 @@ import DevicesPage from "../features/inventory/pages/DevicesPage";
 import IPAMPage from "../features/ipam/pages/IPAMPage";
 import MonitoringPage from "../features/monitoring/pages/MonitoringPage";
 import IncidentsPage from "../features/incidents/pages/IncidentsPage";
+import DeviceDetailsPage from "../features/inventory/pages/DeviceDetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -18,34 +19,38 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-  path: "/",
-  element: <ProtectedRoute />,
-  children: [
-    {
-      element: <AppLayout />,
-      children: [
-        {
-          path: "dashboard",
-          element: <DashboardPage />,
-        },
-        {
-          path: "devices",
-          element: <DevicesPage />,
-        },
-        {
-          path: "ipam",
-          element: <IPAMPage />,
-        },
-        {
-          path: "monitoring",
-          element: <MonitoringPage />,
-        },
-        {
-          path: "incidents",
-          element: <IncidentsPage />,
-        },
-      ],
-    },
-  ],
-},
+    path: "/",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "dashboard",
+            element: <DashboardPage />,
+          },
+          {
+            path: "devices",
+            element: <DevicesPage />,
+          },
+          {
+            path: "devices/:id",
+            element: <DeviceDetailsPage />,
+          },
+          {
+            path: "ipam",
+            element: <IPAMPage />,
+          },
+          {
+            path: "monitoring",
+            element: <MonitoringPage />,
+          },
+          {
+            path: "incidents",
+            element: <IncidentsPage />,
+          },
+        ],
+      },
+    ],
+  },
 ]);
