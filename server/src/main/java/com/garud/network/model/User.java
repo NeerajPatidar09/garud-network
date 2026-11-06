@@ -1,47 +1,44 @@
 package com.garud.network.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.time.Instant;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-@Data
-@NoArgsConstructor
-@Builder
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_users_username", columnNames = "username"),
+        @UniqueConstraint(name = "uk_users_email", columnNames = "email")
+})
+public class User extends BaseEntity {
 
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
+    @Column(nullable = false)
     private String passwordHash;
 
-    @Builder.Default
-    @Column(name = "role", nullable = false, length = 20)
-    private String role = "OPERATOR";
+    @Column(nullable = false, length = 50)
+    private String firstName;
 
-    @Builder.Default
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    @Column(nullable = false, length = 50)
+    private String lastName;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    @Column(nullable = false)
+    private boolean enabled = true;
 
-    @Column(name = "deleted_at")
-    private Instant deletedAt;
+    @Column(nullable = false)
+    private boolean accountNonLocked = true;
+
+    protected User() {
+    }
+
+    // Getters and setters
 }

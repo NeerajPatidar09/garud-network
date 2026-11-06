@@ -4,41 +4,30 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(
-    name = "devices",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_devices_serial_number",
-            columnNames = "serial_number"
-        )
-    }
-)
+@Table(name = "devices", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_devices_serial_number", columnNames = "serial_number")
+})
 public class Device extends BaseEntity {
 
-    @Column(
-        name = "hostname",
-        nullable = false,
-        length = 100
-    )
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "hostname", nullable = false, length = 100)
     private String hostname;
 
-    @Column(
-        name = "ip_address",
-        nullable = false,
-        length = 45
-    )
+    @Column(name = "ip_address", nullable = false, length = 45)
     private String ipAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-        name = "device_type",
-        nullable = false,
-        length = 30
-    )
+    @Column(name = "device_type", nullable = false, length = 30)
     private DeviceType deviceType;
 
     @Column(length = 100)
@@ -47,21 +36,14 @@ public class Device extends BaseEntity {
     @Column(length = 100)
     private String model;
 
-    @Column(
-        name = "serial_number",
-        length = 100,
-        unique = true
-    )
+    @Column(name = "serial_number", length = 100, unique = true)
     private String serialNumber;
 
     @Column(length = 150)
     private String location;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-        nullable = false,
-        length = 30
-    )
+    @Column(nullable = false, length = 30)
     private DeviceStatus status = DeviceStatus.ACTIVE;
 
     @Column(columnDefinition = "TEXT")
@@ -71,11 +53,7 @@ public class Device extends BaseEntity {
         // Required by JPA
     }
 
-    public Device(
-        String hostname,
-        String ipAddress,
-        DeviceType deviceType
-    ) {
+    public Device(String hostname, String ipAddress, DeviceType deviceType) {
         this.hostname = hostname;
         this.ipAddress = ipAddress;
         this.deviceType = deviceType;
@@ -152,5 +130,13 @@ public class Device extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
