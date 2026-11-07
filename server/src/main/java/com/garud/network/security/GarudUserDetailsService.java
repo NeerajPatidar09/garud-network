@@ -1,16 +1,18 @@
 package com.garud.network.security;
 
-import org.springframework.security.core.GrantedAuthority;
+import java.util.HashSet;
+import java.util.Set;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.garud.network.model.User;
+import org.springframework.transaction.annotation.Transactional;
 import com.garud.network.repository.UserRepository;
 
 @Service
-public class GarudUserDetailsService implements UserDetailsService{
+public class GarudUserDetailsService implements UserDetailsService {
+
     private final UserRepository userRepository;
 
     public GarudUserDetailsService(UserRepository userRepository) {
@@ -18,36 +20,37 @@ public class GarudUserDetailsService implements UserDetailsService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
 
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                    new UsernameNotFoundException("User not found")
+        var user = userRepository.findByUsername(username)
+            .orElseThrow(() ->
+                new UsernameNotFoundException("Invalid credentials")
+            );
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        user.getRoles().forEach(role -> {
+
+            authorities.add(
+                new SimpleGrantedAuthority(role.getName())
+            );
+
+            role.getPermissions().forEach(permission -> {
+
+                authorities.add(
+                    new SimpleGrantedAuthority(permission.getName())
                 );
 
+            });
+        });
+
         return org.springframework.security.core.userdetails.User
-        .withUsername(user.getUsername())
-        .password(user.getPasswordHash())
-        .authorities(
-            user.getRoles().stream()
-                .flatMap(role -> {
-
-                    Stream<String> roleAuthority =
-                            Stream.of(role.getName());
-
-                    Stream<String> permissionAuthorities =
-                            role.getPermissions().stream()
-                                .map(Permission::getName);
-
-                    return Stream.concat(
-                            roleAuthority,
-                            permissionAuthorities
-                    );
-                })
-                .distinct()
-                .toArray(String[]::new)
-        )
-        .accountLocked(!user.isAccountNonLocked())
-        .disabled(!user.isEnabled())
-        .build();
+            .withUsername(user.getUsername())
+            .password(user.getPassword())
+            .authorities(authorities)
+            .accountLocked(!user.isAccountNonLocked())
+            .disabled(!user.isEnabled())
+            .build();
     }
 }
