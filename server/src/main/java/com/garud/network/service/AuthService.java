@@ -29,7 +29,7 @@ public class AuthService {
         UserDetailsService userDetailsService,
         JwtService jwtService,
         RefreshTokenService refreshTokenService,
-        @Value("${noimp.security.jwt.access-token-minutes}")
+        @Value("${garud.security.jwt.access-token-minutes}")
         long accessTokenMinutes
     ) {
         this.authenticationManager = authenticationManager;

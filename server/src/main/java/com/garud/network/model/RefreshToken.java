@@ -1,4 +1,4 @@
-package com.garud.network.security;
+package com.garud.network.model;
 
 import java.time.Instant;
 import jakarta.persistence.*;
